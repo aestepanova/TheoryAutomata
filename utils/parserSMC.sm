@@ -1,0 +1,164 @@
+// -*- tab-width: 4; -*-
+//
+// The contents of this file are subject to the Mozilla Public
+// License Version 1.1 (the "License"); you may not use this file
+// except in compliance with the License. You may obtain a copy of
+// the License at http://www.mozilla.org/MPL/
+//
+// Software distributed under the License is distributed on an "AS
+// IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
+// implied. See the License for the specific language governing
+// rights and limitations under the License.
+//
+// The Original Code is State Machine Compiler (SMC).
+//
+// The Initial Developer of the Original Code is Charles W. Rapp.
+// Portions created by Charles W. Rapp are
+// Copyright (C) 2000 - 2003 Charles W. Rapp.
+// All Rights Reserved.
+//
+// Contributor(s):
+//      Port to Python by Francois Perrad, francois.perrad@gadz.org
+//
+// State Machine
+//	This state machine is recognizes the regular expression 0*1*.
+//
+// RCS ID
+// $Id$
+//
+// CHANGE LOG
+// $Log$
+// Revision 1.1  2005/05/28 17:48:29  cwrapp
+// Added Python examples 1 - 4 and 7.
+//
+//
+
+%start Map1::Start
+%class CommandClass
+
+%map Map1
+%%
+// State		Transition		End State		Action(s)
+Start {
+				Point(c: str)	        Points			    {FormCommand(c);}
+				Slash(c: str)   	    Error 			    {Unacceptable();}
+				Space                   SpaceBeforeCommand  {}
+				Dash                    Error               {Unacceptable();}
+				LetterOrDigit(c: str)   LettersDigits       {FormCommand(c);}
+				Unknown	            	Error		        {Unacceptable();}
+				EOS				        OK				    {Unacceptable();}
+}
+
+Points {
+				Point(c: str)	        TwoPoints	      {FormCommand(c);}
+				Slash(c: str)	        Slashes		      {FormCommand(c);}
+				Space                   Error             {Unacceptable();}
+				Dash                    Error             {Unacceptable();}
+				LetterOrDigit(c: str)   Error             {Unacceptable();}
+				Unknown			        Error			  {Unacceptable();}
+				EOS				        Error			  {Unacceptable();}
+}
+
+TwoPoints {
+                Point(c:str)    	    Error     	      {Unacceptable();}
+				Slash(c:str)   	        Slashes			  {FormCommand(c);}
+				Space                   Error             {Unacceptable();}
+				Dash                    Error             {Unacceptable();}
+				LetterOrDigit(c: str)   Error             {Unacceptable();}
+				Unknown			        Error			  {Unacceptable();}
+				EOS				        Error			  {Unacceptable();}
+}
+
+Slashes {
+				Point(c: str)	        Points 		        {FormCommand(c);}
+				Slash(c: str)           Error 			    {Unacceptable();}
+				Space                   Error               {Unacceptable();}
+				Dash                    Error               {Unacceptable();}
+				LetterOrDigit(c:str)    LettersDigits       {FormCommand(c);}
+				Unknown		        	Error			    {Unacceptable();}
+				EOS				        Error				{Unacceptable();}
+}
+
+SpaceBeforeCommand {
+				Point(c: str)			Points			    {FormCommand(c);}
+				Slash(c: str)	    	Error 		    	{Unacceptable();}
+				Space                   SpaceBeforeCommand  {}
+				Dash                    Error               {Unacceptable();}
+				LetterOrDigit(c: str)   LettersDigits       {FormCommand(c);}
+				Unknown			        Error			    {Unacceptable();}
+				EOS				        OK				    {Unacceptable();}
+}
+
+LettersDigits {
+                Point(c: str)			CommandPoint	    {FormCommand(c);}
+				Slash(c: str)	    	Slashes		    	{FormCommand(c);}
+				Space                   SpaceBeforeKeys     {AddCommand();}
+				Dash                    Error               {Unacceptable();}
+				LetterOrDigit(c: str)   LettersDigits       {FormCommand(c);}
+				Unknown			        Error			    {Unacceptable();}
+				EOS				        OK                  {Acceptable(); AddCommand();}
+}
+
+CommandPoint {
+                Point(c: str)			Error         	    {Unacceptable();}
+				Slash(c: str)	    	Error         	    {Unacceptable();}
+				Space                   Error         	    {Unacceptable();}
+				Dash                    Error               {Unacceptable();}
+				LetterOrDigit(c: str)   ExtensionLD         {FormCommand(c);}
+				Unknown			        Error			    {Unacceptable();}
+				EOS				        Error				{Unacceptable();}
+}
+
+ExtensionLD {
+                Point(c: str)			Error         	    {Unacceptable();}
+				Slash(c: str)	    	Error         	    {Unacceptable();}
+				Space                   SpaceBeforeKeys     {AddCommand();}
+				Dash                    Error               {Unacceptable();}
+				LetterOrDigit(c: str)   ExtensionLD         {FormCommand(c);}
+				Unknown			        Error			    {Unacceptable();}
+				EOS			        	OK                  {Acceptable(); AddCommand();}
+}
+
+SpaceBeforeKeys {
+				Point(c: str)			Error			        {Unacceptable();}
+				Slash(c: str)	    	Error 			        {Unacceptable();}
+				Space                   Error                   {Unacceptable();}
+				Dash                    Dashes                  {}
+				LetterOrDigit(c: str)   Error                   {Unacceptable();}
+				Unknown			        Error			        {Unacceptable();}
+				EOS				        OK              	    {Acceptable();}
+}
+
+Dashes {
+                Point(c: str)			Error			    {Unacceptable();}
+				Slash(c: str)	    	Error 			    {Unacceptable();}
+				Space                   Error               {Unacceptable();}
+				Dash                    Error               {Unacceptable();}
+				LetterOrDigit(c: str)   KeyLD               {AddKey(c);}
+				Unknown			        Error			    {Unacceptable();}
+				EOS         	        Error				{Unacceptable();}
+}
+
+KeyLD {
+                Point(c: str)			Error			    {Unacceptable();}
+				Slash(c: str)	    	Error 			    {Unacceptable();}
+				Space                   SpaceBeforeKeys     {}
+				Dash                    Error               {Unacceptable();}
+				LetterOrDigit(c: str)   Error               {Unacceptable();}
+				Unknown			        Error			    {Unacceptable();}
+				EOS                     OK				    {Acceptable();}
+}
+
+OK {}
+
+Error {
+				Point(c: str)			nil			    {Unacceptable();}
+				Slash(c: str)	    	nil 			{Unacceptable();}
+				Space                   nil             {Unacceptable();}
+				Dash                    nil             {Unacceptable();}
+				LetterOrDigit(c: str)   nil             {Unacceptable();}
+				Unknown			        nil			    {Unacceptable();}
+				EOS				        nil				{Unacceptable();}
+}
+
+%%
