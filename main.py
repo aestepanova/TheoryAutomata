@@ -2,6 +2,9 @@ from parsers import parserSMC, parserRegex, parserLeX
 
 from stringGenerator import generate as generator
 
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
 import time
 
 data = [[], [], []]
@@ -158,8 +161,7 @@ def save():
 
 
 def timing():
-    # for i in range(0, 1001, 100):
-    for i in range(0, 100, 10):
+    for i in range(0, 1007, 100):
         path = generator(PATH_TimingTESTS, N=i, maxLen=100)
         file_paths.append(path)
 
@@ -190,6 +192,9 @@ def timing():
         end = time.time_ns()
         data[2].append(end - start)
         handler.close()
+
+    indexes = [i for i in range(0, 1007, 100)]
+    df = pd.DataFrame(data, columns=indexes, index=['smc', 'regex', 'lex'])
     print(data)
     return 1
 

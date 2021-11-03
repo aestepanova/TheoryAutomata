@@ -1,4 +1,4 @@
-from build.utils import parserSMC_sm
+from utils import parserSMC_sm
 
 
 class GoodCommands(object):

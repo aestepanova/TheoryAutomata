@@ -1,0 +1,294 @@
+digraph parserSMC {
+
+    node
+        [shape=Mrecord width=1.5];
+
+    subgraph cluster_Map1 {
+
+        label="Map1";
+
+        //
+        // States (Nodes)
+        //
+
+        "Map1::Start"
+            [label="{Start}"];
+
+        "Map1::Points"
+            [label="{Points}"];
+
+        "Map1::TwoPoints"
+            [label="{TwoPoints}"];
+
+        "Map1::Slashes"
+            [label="{Slashes}"];
+
+        "Map1::SpaceBeforeCommand"
+            [label="{SpaceBeforeCommand}"];
+
+        "Map1::LettersDigits"
+            [label="{LettersDigits}"];
+
+        "Map1::CommandPoint"
+            [label="{CommandPoint}"];
+
+        "Map1::ExtensionLD"
+            [label="{ExtensionLD}"];
+
+        "Map1::SpaceBeforeKeys"
+            [label="{SpaceBeforeKeys}"];
+
+        "Map1::Dashes"
+            [label="{Dashes}"];
+
+        "Map1::KeyLD"
+            [label="{KeyLD}"];
+
+        "Map1::OK"
+            [label="{OK}"];
+
+        "Map1::Error"
+            [label="{Error|Point/\l&nbsp;&nbsp;&nbsp;Unacceptable;\lSlash/\l&nbsp;&nbsp;&nbsp;Unacceptable;\lSpace/\l&nbsp;&nbsp;&nbsp;Unacceptable;\lDash/\l&nbsp;&nbsp;&nbsp;Unacceptable;\lLetterOrDigit/\l&nbsp;&nbsp;&nbsp;Unacceptable;\lUnknown/\l&nbsp;&nbsp;&nbsp;Unacceptable;\lEOS/\l&nbsp;&nbsp;&nbsp;Unacceptable;\l}"];
+
+        "%start"
+            [label="" shape=circle style=filled fillcolor=black width=0.25];
+
+        //
+        // Transitions (Edges)
+        //
+
+        "Map1::Start" -> "Map1::Points"
+            [label="Point/\lFormCommand;\l"];
+
+        "Map1::Start" -> "Map1::Error"
+            [label="Slash/\lUnacceptable;\l"];
+
+        "Map1::Start" -> "Map1::SpaceBeforeCommand"
+            [label="Space/\l"];
+
+        "Map1::Start" -> "Map1::Error"
+            [label="Dash/\lUnacceptable;\l"];
+
+        "Map1::Start" -> "Map1::LettersDigits"
+            [label="LetterOrDigit/\lFormCommand;\l"];
+
+        "Map1::Start" -> "Map1::Error"
+            [label="Unknown/\lUnacceptable;\l"];
+
+        "Map1::Start" -> "Map1::OK"
+            [label="EOS/\lUnacceptable;\l"];
+
+        "Map1::Points" -> "Map1::TwoPoints"
+            [label="Point/\lFormCommand;\l"];
+
+        "Map1::Points" -> "Map1::Slashes"
+            [label="Slash/\lFormCommand;\l"];
+
+        "Map1::Points" -> "Map1::Error"
+            [label="Space/\lUnacceptable;\l"];
+
+        "Map1::Points" -> "Map1::Error"
+            [label="Dash/\lUnacceptable;\l"];
+
+        "Map1::Points" -> "Map1::Error"
+            [label="LetterOrDigit/\lUnacceptable;\l"];
+
+        "Map1::Points" -> "Map1::Error"
+            [label="Unknown/\lUnacceptable;\l"];
+
+        "Map1::Points" -> "Map1::Error"
+            [label="EOS/\lUnacceptable;\l"];
+
+        "Map1::TwoPoints" -> "Map1::Error"
+            [label="Point/\lUnacceptable;\l"];
+
+        "Map1::TwoPoints" -> "Map1::Slashes"
+            [label="Slash/\lFormCommand;\l"];
+
+        "Map1::TwoPoints" -> "Map1::Error"
+            [label="Space/\lUnacceptable;\l"];
+
+        "Map1::TwoPoints" -> "Map1::Error"
+            [label="Dash/\lUnacceptable;\l"];
+
+        "Map1::TwoPoints" -> "Map1::Error"
+            [label="LetterOrDigit/\lUnacceptable;\l"];
+
+        "Map1::TwoPoints" -> "Map1::Error"
+            [label="Unknown/\lUnacceptable;\l"];
+
+        "Map1::TwoPoints" -> "Map1::Error"
+            [label="EOS/\lUnacceptable;\l"];
+
+        "Map1::Slashes" -> "Map1::Points"
+            [label="Point/\lFormCommand;\l"];
+
+        "Map1::Slashes" -> "Map1::Error"
+            [label="Slash/\lUnacceptable;\l"];
+
+        "Map1::Slashes" -> "Map1::Error"
+            [label="Space/\lUnacceptable;\l"];
+
+        "Map1::Slashes" -> "Map1::Error"
+            [label="Dash/\lUnacceptable;\l"];
+
+        "Map1::Slashes" -> "Map1::LettersDigits"
+            [label="LetterOrDigit/\lFormCommand;\l"];
+
+        "Map1::Slashes" -> "Map1::Error"
+            [label="Unknown/\lUnacceptable;\l"];
+
+        "Map1::Slashes" -> "Map1::Error"
+            [label="EOS/\lUnacceptable;\l"];
+
+        "Map1::SpaceBeforeCommand" -> "Map1::Points"
+            [label="Point/\lFormCommand;\l"];
+
+        "Map1::SpaceBeforeCommand" -> "Map1::Error"
+            [label="Slash/\lUnacceptable;\l"];
+
+        "Map1::SpaceBeforeCommand" -> "Map1::SpaceBeforeCommand"
+            [label="Space/\l"];
+
+        "Map1::SpaceBeforeCommand" -> "Map1::Error"
+            [label="Dash/\lUnacceptable;\l"];
+
+        "Map1::SpaceBeforeCommand" -> "Map1::LettersDigits"
+            [label="LetterOrDigit/\lFormCommand;\l"];
+
+        "Map1::SpaceBeforeCommand" -> "Map1::Error"
+            [label="Unknown/\lUnacceptable;\l"];
+
+        "Map1::SpaceBeforeCommand" -> "Map1::OK"
+            [label="EOS/\lUnacceptable;\l"];
+
+        "Map1::LettersDigits" -> "Map1::CommandPoint"
+            [label="Point/\lFormCommand;\l"];
+
+        "Map1::LettersDigits" -> "Map1::Slashes"
+            [label="Slash/\lFormCommand;\l"];
+
+        "Map1::LettersDigits" -> "Map1::SpaceBeforeKeys"
+            [label="Space/\lAddCommand;\l"];
+
+        "Map1::LettersDigits" -> "Map1::Error"
+            [label="Dash/\lUnacceptable;\l"];
+
+        "Map1::LettersDigits" -> "Map1::LettersDigits"
+            [label="LetterOrDigit/\lFormCommand;\l"];
+
+        "Map1::LettersDigits" -> "Map1::Error"
+            [label="Unknown/\lUnacceptable;\l"];
+
+        "Map1::LettersDigits" -> "Map1::OK"
+            [label="EOS/\lAcceptable;\lAddCommand;\l"];
+
+        "Map1::CommandPoint" -> "Map1::Error"
+            [label="Point/\lUnacceptable;\l"];
+
+        "Map1::CommandPoint" -> "Map1::Error"
+            [label="Slash/\lUnacceptable;\l"];
+
+        "Map1::CommandPoint" -> "Map1::Error"
+            [label="Space/\lUnacceptable;\l"];
+
+        "Map1::CommandPoint" -> "Map1::Error"
+            [label="Dash/\lUnacceptable;\l"];
+
+        "Map1::CommandPoint" -> "Map1::ExtensionLD"
+            [label="LetterOrDigit/\lFormCommand;\l"];
+
+        "Map1::CommandPoint" -> "Map1::Error"
+            [label="Unknown/\lUnacceptable;\l"];
+
+        "Map1::CommandPoint" -> "Map1::Error"
+            [label="EOS/\lUnacceptable;\l"];
+
+        "Map1::ExtensionLD" -> "Map1::Error"
+            [label="Point/\lUnacceptable;\l"];
+
+        "Map1::ExtensionLD" -> "Map1::Error"
+            [label="Slash/\lUnacceptable;\l"];
+
+        "Map1::ExtensionLD" -> "Map1::SpaceBeforeKeys"
+            [label="Space/\lAddCommand;\l"];
+
+        "Map1::ExtensionLD" -> "Map1::Error"
+            [label="Dash/\lUnacceptable;\l"];
+
+        "Map1::ExtensionLD" -> "Map1::ExtensionLD"
+            [label="LetterOrDigit/\lFormCommand;\l"];
+
+        "Map1::ExtensionLD" -> "Map1::Error"
+            [label="Unknown/\lUnacceptable;\l"];
+
+        "Map1::ExtensionLD" -> "Map1::OK"
+            [label="EOS/\lAcceptable;\lAddCommand;\l"];
+
+        "Map1::SpaceBeforeKeys" -> "Map1::Error"
+            [label="Point/\lUnacceptable;\l"];
+
+        "Map1::SpaceBeforeKeys" -> "Map1::Error"
+            [label="Slash/\lUnacceptable;\l"];
+
+        "Map1::SpaceBeforeKeys" -> "Map1::Error"
+            [label="Space/\lUnacceptable;\l"];
+
+        "Map1::SpaceBeforeKeys" -> "Map1::Dashes"
+            [label="Dash/\l"];
+
+        "Map1::SpaceBeforeKeys" -> "Map1::Error"
+            [label="LetterOrDigit/\lUnacceptable;\l"];
+
+        "Map1::SpaceBeforeKeys" -> "Map1::Error"
+            [label="Unknown/\lUnacceptable;\l"];
+
+        "Map1::SpaceBeforeKeys" -> "Map1::OK"
+            [label="EOS/\lAcceptable;\l"];
+
+        "Map1::Dashes" -> "Map1::Error"
+            [label="Point/\lUnacceptable;\l"];
+
+        "Map1::Dashes" -> "Map1::Error"
+            [label="Slash/\lUnacceptable;\l"];
+
+        "Map1::Dashes" -> "Map1::Error"
+            [label="Space/\lUnacceptable;\l"];
+
+        "Map1::Dashes" -> "Map1::Error"
+            [label="Dash/\lUnacceptable;\l"];
+
+        "Map1::Dashes" -> "Map1::KeyLD"
+            [label="LetterOrDigit/\lAddKey;\l"];
+
+        "Map1::Dashes" -> "Map1::Error"
+            [label="Unknown/\lUnacceptable;\l"];
+
+        "Map1::Dashes" -> "Map1::Error"
+            [label="EOS/\lUnacceptable;\l"];
+
+        "Map1::KeyLD" -> "Map1::Error"
+            [label="Point/\lUnacceptable;\l"];
+
+        "Map1::KeyLD" -> "Map1::Error"
+            [label="Slash/\lUnacceptable;\l"];
+
+        "Map1::KeyLD" -> "Map1::SpaceBeforeKeys"
+            [label="Space/\l"];
+
+        "Map1::KeyLD" -> "Map1::Error"
+            [label="Dash/\lUnacceptable;\l"];
+
+        "Map1::KeyLD" -> "Map1::Error"
+            [label="LetterOrDigit/\lUnacceptable;\l"];
+
+        "Map1::KeyLD" -> "Map1::Error"
+            [label="Unknown/\lUnacceptable;\l"];
+
+        "Map1::KeyLD" -> "Map1::OK"
+            [label="EOS/\lAcceptable;\l"];
+
+        "%start" -> "Map1::Start"
+    }
+
+}
